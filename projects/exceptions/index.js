@@ -22,11 +22,15 @@ function isAllTrue(array, fn) {
   } else if (typeof fn !== 'function') {
     throw new Error('fn is not a function');
   }
-  if (array.every(fn)) {
-    return true;
+
+  for (const el of array) {
+    if (!fn(el)) {
+      return false;
+    }
   }
-  return false;
+  return true;
 }
+
 /*
  Задание 2:
 
@@ -49,8 +53,11 @@ function isSomeTrue(array, fn) {
   } else if (typeof fn !== 'function') {
     throw new Error('fn is not a function');
   }
-  if (array.some(fn)) {
-    return true;
+
+  for (const el of array) {
+    if (fn(el)) {
+      return true;
+    }
   }
   return false;
 }
@@ -66,7 +73,22 @@ function isSomeTrue(array, fn) {
  3.3: Необходимо выбрасывать исключение в случаях:
    - fn не является функцией (с текстом "fn is not a function")
  */
-function returnBadArguments(fn, ...args) {}
+function returnBadArguments(fn, ...args) {
+  const finalArray = [];
+
+  if (typeof fn !== 'function') {
+    throw new Error('fn is not a function');
+  }
+
+  for (let i = 0; i < args.length; i++) {
+    try {
+      fn(args[i]);
+    } catch {
+      finalArray.push(args[i]);
+    }
+  }
+  return finalArray;
+}
 
 /*
  Задание 4:
@@ -85,7 +107,41 @@ function returnBadArguments(fn, ...args) {}
    - number не является числом (с текстом "number is not a number")
    - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator(number = 0) {}
+function calculator(number = 0) {
+  if (typeof number !== 'number') {
+    throw new Error('number is not a number');
+  }
+
+  return {
+    sum: function () {
+      for (const arg of arguments) {
+        number += arg;
+      }
+      return number;
+    },
+    dif: function () {
+      for (const arg of arguments) {
+        number -= arg;
+      }
+      return number;
+    },
+    div: function () {
+      for (const arg of arguments) {
+        if (arg === 0) {
+          throw new Error('division by 0');
+        }
+        number /= arg;
+      }
+      return number;
+    },
+    mul: function () {
+      for (const arg of arguments) {
+        number *= arg;
+      }
+      return number;
+    },
+  };
+}
 
 /* При решении задач, постарайтесь использовать отладчик */
 
