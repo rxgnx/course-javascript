@@ -42,11 +42,14 @@ function map(array, fn) {
    reduce([1, 2, 3], (all, current) => all + current) // 6
  */
 function reduce(array, fn, initial) {
-  let accumulator = initial;
-  for (let i = initial; i < array.length; i++) {
-    accumulator = fn(accumulator, array[i]);
+  const hasInitial = typeof initial !== 'undefined';
+  let first = hasInitial ? initial : array[0];
+
+  for (let i = hasInitial ? 0 : 1; i < array.length; i++) {
+    first = fn(first, array[i], i, array);
   }
-  return accumulator;
+
+  return first;
 }
 
 /*
